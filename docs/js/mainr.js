@@ -13,7 +13,7 @@
 
     var Contact = (function () {
         function Contact(el) {
-            this.contacts_path = '../data/contacts/';
+            this.contacts_path = 'data/contacts/';
             this.el = el;
             var name = el.getAttribute('data-contact');
             this.load(name);
