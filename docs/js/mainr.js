@@ -73,8 +73,10 @@
         };
         Contact.prototype.renderEmail = function (prop) {
             var email = this.raw[prop].lower();
-            var host = this.raw.domain ? this.raw.domain : window.location.host.replace(/(http[s]*\:\/\/)*(w{3}\.)*/gi, "");
-            email = email + "@" + host;
+            if (!/@/.test(email)) {
+                var host = this.raw.domain ? this.raw.domain : window.location.host.replace(/(http[s]*\:\/\/)*(w{3}\.)*/gi, "");
+                email = email + "@" + host;
+            }
             return this.renderLink("mailto:" + email, prop.initCaps() + " : " + email);
         };
         return Contact;
