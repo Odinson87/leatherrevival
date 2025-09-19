@@ -203,10 +203,14 @@ article header .avatar {
     border-radius: 50%;
     margin-right: 10px;
 }
-article header a,
-article header a:hover,
-article header a:visited {
+article a,
+article a:hover,
+article a:visited {
     color: antiquewhite;
+
+}
+article a {
+    text-decoration: none;
 }
 
 article section img {

@@ -1,3 +1,4 @@
+import { Cache } from './Cache.js';
 import { Contact } from './Contact.js';
 import { Posts } from './Posts.js';
 var App = (function () {
@@ -7,6 +8,7 @@ var App = (function () {
         };
         this.dom = {};
         this.mastadon_id = '114595920733050573';
+        this.cachedPosts = new Cache('posts', '5h', {});
         this.cacheDom();
         this.bind();
     }
@@ -25,7 +27,7 @@ var App = (function () {
         this.dom.nav.forEach(function (element) {
             if (element.textContent.lower() === "gallery") {
                 element.addEventListener("click", function () {
-                    _this.blackout(_this.notification("Gallery Coming Soon..."));
+                    //_this.blackout(_this.notification("Gallery Coming Soon..."));
                     _this.posts();
                 });
             }
@@ -77,7 +79,7 @@ var App = (function () {
         let posts = new Posts(this.mastadon_id);
         let postsEl = await posts.render();
         this.blackout(postsEl, true);
-        this.dom.blackout.style.display = 'none';
+        //this.dom.blackout.style.display = 'none';
     };
     return App;
 }());

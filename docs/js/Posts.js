@@ -1,9 +1,17 @@
+import { Cache } from "./Cache";
 var Posts = (function () {
     function Posts (id, options = {}) {
         this.user_id = id;
         this.options = options
     }
     Posts.prototype.getUserPosts = async function () {
+        let cachedPosts = new Cache().load('posts');
+        
+        // load from cache if not expired
+        if (cachedPosts) {
+            return cachedPosts;
+        }
+
         let url = 'https://mastodon.social/api/v1/accounts/' + this.user_id + '/statuses';
 
         let posts = await fetch(url).then(function (response) {
