@@ -25,7 +25,7 @@ var App = (function () {
         this.dom.nav.forEach(function (element) {
             if (element.textContent.lower() === "gallery") {
                 element.addEventListener("click", function () {
-                    //_this.blackout(_this.notification("Gallery Coming Soon..."));
+                    _this.blackout(_this.notification("Gallery Coming Soon..."));
                     _this.posts();
                 });
             }
@@ -59,6 +59,7 @@ var App = (function () {
         });
         blackout.appendChild(close);
         blackout.appendChild(el);
+        this.dom['blackout'] = blackout;
         this.dom.body.appendChild(blackout);
     };
     App.prototype.notification = function (str) {
@@ -72,8 +73,9 @@ var App = (function () {
     App.prototype.posts = async function() {
         let posts = new Posts(this.mastadon_id);
         let postsEl = await posts.render();
-        console.log(postsEl);
         this.blackout(postsEl);
+        console.log(this.dom);
+        this.dom.blackout.style.display = 'none';
     };
     return App;
 }());
