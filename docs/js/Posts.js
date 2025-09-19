@@ -96,7 +96,10 @@ var Posts = (function () {
     };
     Posts.prototype.toggleLargeViewer = function (viewerEl) {
         let lgViewer = viewerEl.cloneNode(true);
-        lgViewer.querySelector('.many').remove();
+        let many = lgViewer.querySelector('.many');
+        if (null !== many) {
+            many.remove();
+        }
         lgViewer.classList.add('large');
         lgViewer.classList.add('blackout');
         lgViewer.addEventListener('click', function (e) {
