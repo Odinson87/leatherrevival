@@ -6,29 +6,32 @@ var Cache = (function () {
             return;
         }
 
-        this.name = name;
-        this.intervalMs = intervalMs;
-
-        let created = new Date();
+        let created = Date.now();
         let stores = this.getStores('stores');
         stores[name] = {
-            lastTimeMs: created.getUTCMilliseconds(),
+            lastTimeMs: created,
             interval: this.calcMs(intervalMs)
         };
-        this.saveStores(stores);
+        
         // only save if `data` has properties 
         // so we don't just trash existing data with empty onload
         if (Object.keys(data).length > 0) {
             this.save(name, data);
+        } else {
+            // when instantiated with empty data object
+            // use null to indicate never been cached, fetch required 
+            stores[name].lastTimeMs = null;
         }
+        
+        this.saveStores(stores);
     }
     Cache.prototype.calcMs = function (value) {
         
-        const hrsRegex = /(\d*?)h$/;
         const timeStrRegex = /(\d*?)([hm])$/;
         let result = value;
-
-        if (Number.isNaN(value) && timeStrRegex.test(value)) {
+        let isnum = /^\d+$/.test(value);
+        console.log('calcMs', isnum);
+        if (!isnum && timeStrRegex.test(value)) {
             let i = value.match(timeStrRegex);
             let t = i[2];
             switch (t) {
@@ -62,9 +65,9 @@ var Cache = (function () {
             let stores = this.getStores();
             if (Object.hasOwn(stores, name)) {
                 if (stores[name].interval) {
-                    let d = new Date();
+                    let d = Date.now();
                     let expiredMs = stores[name].lastTimeMs + stores[name].interval ;
-                    if (d.getUTCMilliseconds() > expiredMs) {
+                    if ( null == stores[name].lastTimeMs || d > expiredMs ) {
                         // cache has expired refresh/fetch
                         return null;
                     }
@@ -84,9 +87,9 @@ var Cache = (function () {
             
             // update store metadata
             let stores = this.getStores();
-            let d = new Date();
+            let d = Date.now();
             if (Object.hasOwn(stores, name)) {
-                stores[name]['lastTimeMs'] = d.getUTCMilliseconds();
+                stores[name]['lastTimeMs'] = d;
             }
             this.saveStores(stores);
             return true;

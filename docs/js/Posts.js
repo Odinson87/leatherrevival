@@ -2,7 +2,7 @@ import { Cache } from "./Cache";
 var Posts = (function () {
     function Posts (id, options = {}) {
         this.user_id = id;
-        this.options = options
+        this.options = options;
     }
     Posts.prototype.getUserPosts = async function () {
         let cachedPosts = new Cache().load('posts');
@@ -19,6 +19,8 @@ var Posts = (function () {
                 return response.json();
             }
         });
+
+        new Cache().save('posts', posts);
         return posts;
     };
     Posts.prototype.render = async function() {
