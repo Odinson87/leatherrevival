@@ -47,9 +47,12 @@ var App = (function () {
             this.blackout(this.d.contacts[name].render());
         }
     };
-    App.prototype.blackout = function (el) {
+    App.prototype.blackout = function (el, scroll = false) {
         var blackout = document.createElement("div");
         blackout.classList.add("blackout");
+        if (scroll) {
+            blackout.classList.add("scroll");
+        }
         var close = document.createElement("a");
         close.classList.add("btn");
         close.classList.add("bg-red");
@@ -73,8 +76,7 @@ var App = (function () {
     App.prototype.posts = async function() {
         let posts = new Posts(this.mastadon_id);
         let postsEl = await posts.render();
-        this.blackout(postsEl);
-        console.log(this.dom);
+        this.blackout(postsEl, true);
         this.dom.blackout.style.display = 'none';
     };
     return App;

@@ -156,6 +156,10 @@ nav .btn:hover{
     justify-content: center;
     align-items: center;
 }
+.blackout.scroll {
+    justify-content: flex-start;
+    overflow-y: scroll;
+}
 
 .modal{
     width:300px;
