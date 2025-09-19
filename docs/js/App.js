@@ -1,10 +1,12 @@
 import { Contact } from './Contact.js';
+import { Posts } from './Posts.js';
 var App = (function () {
     function App() {
         this.d = {
             "contacts": {}
         };
         this.dom = {};
+        this.mastadon_id = '114595920733050573';
         this.cacheDom();
         this.bind();
     }
@@ -23,7 +25,8 @@ var App = (function () {
         this.dom.nav.forEach(function (element) {
             if (element.textContent.lower() === "gallery") {
                 element.addEventListener("click", function () {
-                    _this.blackout(_this.notification("Gallery Coming Soon..."));
+                    //_this.blackout(_this.notification("Gallery Coming Soon..."));
+                    _this.posts();
                 });
             }
         });
@@ -65,6 +68,12 @@ var App = (function () {
         note.appendChild(document.createTextNode(str));
         modal.appendChild(note);
         return modal;
+    };
+    App.prototype.posts = async function() {
+        let posts = new Posts(this.mastadon_id);
+        let postsEl = await posts.render();
+        console.log(postsEl);
+        this.blackout(postsEl);
     };
     return App;
 }());

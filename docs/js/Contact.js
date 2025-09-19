@@ -9,7 +9,7 @@ var Contact = (function () {
         var _this = this;
         name = this.contacts_path + name + '.json';
         fetch(name)
-            .then(function (response) {
+        .then(function (response) {
             if (response.ok) {
                 return response.json();
             }
