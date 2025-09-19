@@ -6,21 +6,30 @@ var Cache = (function () {
             return;
         }
 
-        let created = Date.now();
         let stores = this.getStores('stores');
-        stores[name] = {
-            lastTimeMs: created,
-            interval: this.calcMs(intervalMs)
-        };
+        console.log('cache store:', stores);
+
+        let item = this.load(name) ?? {};
+        //console.log('cache item:', item, Object.keys(item).length);
+
+        //instantiate first time
+        if (!Object.hasOwn(stores, name)){
+            stores[name] = {};
+        }
+        
+        // set last time as null when never set and cached item is empty (due to never set or expired)
+        if (!Object.hasOwn(stores[name], 'lasTimeMs') && Object.keys(item).length == 0) {
+            // set as null so data will be pulled
+            stores[name]['lastTimeMs'] = null;
+        }
+
+        // add/update interval
+        stores[name]['interval'] = this.calcMs(intervalMs);
         
         // only save if `data` has properties 
         // so we don't just trash existing data with empty onload
         if (Object.keys(data).length > 0) {
             this.save(name, data);
-        } else {
-            // when instantiated with empty data object
-            // use null to indicate never been cached, fetch required 
-            stores[name].lastTimeMs = null;
         }
         
         this.saveStores(stores);

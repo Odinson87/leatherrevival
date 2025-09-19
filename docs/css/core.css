@@ -207,10 +207,14 @@ article a,
 article a:hover,
 article a:visited {
     color: antiquewhite;
-
 }
 article a {
     text-decoration: none;
+}
+article a:hover,
+article a:visited {
+    text-decoration: underline;
+
 }
 
 article section img {

@@ -33,7 +33,7 @@ var Posts = (function () {
         return container;
     };
     Posts.prototype.renderPost = function (obj) {
-        console.log(obj);
+        // console.log(obj);
         let article = document.createElement('article');
         let header = this.renderHeader(obj)
         let body = document.createElement('section');
