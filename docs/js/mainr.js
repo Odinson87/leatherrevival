@@ -30,8 +30,9 @@
                 stores[name] = {};
             }
             
-            // instantiate last time when never set and cached item is empty
+            // set last time as null when never set and cached item is empty (due to never set or expired)
             if (!Object.hasOwn(stores[name], 'lasTimeMs') && Object.keys(item).length == 0) {
+                // set as null so data will be pulled
                 stores[name]['lastTimeMs'] = null;
             }
 
@@ -233,7 +234,7 @@
             let body = document.createElement('section');
             body.classList.add('body');
             body.innerHTML = obj.content;
-            body.append(...this.renderMedia(obj));
+            body.append(this.renderMedia(obj));
             let footer = document.createElement('footer');
             article.appendChild(header);
             article.appendChild(body);
@@ -251,7 +252,6 @@
                     obj.account.display_name + ' @' + obj.account.acct
                 );
                 let link = document.createElement('a');
-                console.log(link);
                 link.setAttribute('href', obj.account.uri);
                 link.appendChild(name);
                 
@@ -261,6 +261,9 @@
             return header;
         };
         Posts.prototype.renderMedia = function(obj) {
+            let container = document.createElement('div');
+            container.classList.add('media-viewer');
+            
             let media = [];
             if (Array.isArray(obj.media_attachments)) {
                 obj.media_attachments.forEach( attachment => {
@@ -271,7 +274,15 @@
                     }
                 });
             }
-            return media;
+            if (media.length > 1) {
+                let many = document.createElement('span');
+                many.classList.add('many');
+                many.append(document.createTextNode('[]]'));
+                container.append(many);
+
+            }
+            container.append(...media);
+            return container;
         };
         return Posts;
     }());

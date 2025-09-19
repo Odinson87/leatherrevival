@@ -217,9 +217,20 @@ article a:visited {
 
 }
 
-article section img {
-    margin-left: -10px;
+    
+article section .media-viewer {
+    position: relative;
+    max-height: 320px;
     width: 320px;
+    margin-left: -10px;
+    display: flex;
+    flex-flow: row nowrap;
+    overflow-x: hidden;
+    overflow-x: scroll;
+}
+article section .media-viewer img {
+    max-height: 320px;
+    max-width: 320px;
 }
 
 
@@ -229,14 +240,11 @@ article section img {
     }
     .media-container img{width:auto; height:100%;}
     .gallery .media-container{height:200px;}
-
-
 }
 @media all and (min-width: 720px){
     .page{
         width:720px;
     }
-
 }
 @media all and (min-width: 1024px){
     .page{
@@ -244,4 +252,23 @@ article section img {
     }
 }
 
+@media all and (min-width: 1280) {
+    .page{
+        width: 1280px;
+    }
+}
+
 .center {text-align:center;}
+
+span.many  {
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    width: 22px;
+    height: 22px;
+    padding: 2px;
+    background-color: #333;
+    border-radius: 50%;
+    text-align: center;
+    z-index: 9999;
+}

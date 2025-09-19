@@ -39,7 +39,7 @@ var Posts = (function () {
         let body = document.createElement('section');
         body.classList.add('body');
         body.innerHTML = obj.content;
-        body.append(...this.renderMedia(obj));
+        body.append(this.renderMedia(obj));
         let footer = document.createElement('footer');
         article.appendChild(header);
         article.appendChild(body);
@@ -57,7 +57,6 @@ var Posts = (function () {
                 obj.account.display_name + ' @' + obj.account.acct
             );
             let link = document.createElement('a');
-            console.log(link);
             link.setAttribute('href', obj.account.uri);
             link.appendChild(name);
             
@@ -67,6 +66,9 @@ var Posts = (function () {
         return header;
     };
     Posts.prototype.renderMedia = function(obj) {
+        let container = document.createElement('div');
+        container.classList.add('media-viewer')
+        
         let media = [];
         if (Array.isArray(obj.media_attachments)) {
             obj.media_attachments.forEach( attachment => {
@@ -77,7 +79,15 @@ var Posts = (function () {
                 }
             })
         }
-        return media;
+        if (media.length > 1) {
+            let many = document.createElement('span');
+            many.classList.add('many');
+            many.append(document.createTextNode('[]]'));
+            container.append(many);
+
+        }
+        container.append(...media);
+        return container;
     };
     return Posts;
 }());
