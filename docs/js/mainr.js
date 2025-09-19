@@ -20,7 +20,6 @@
             }
 
             let stores = this.getStores('stores');
-            console.log('cache store:', stores);
 
             let item = this.load(name) ?? {};
             //console.log('cache item:', item, Object.keys(item).length);
@@ -52,7 +51,7 @@
             const timeStrRegex = /(\d*?)([hm])$/;
             let result = value;
             let isnum = /^\d+$/.test(value);
-            console.log('calcMs', isnum);
+
             if (!isnum && timeStrRegex.test(value)) {
                 let i = value.match(timeStrRegex);
                 let t = i[2];
@@ -261,6 +260,7 @@
             return header;
         };
         Posts.prototype.renderMedia = function(obj) {
+            let _this = this;
             let container = document.createElement('div');
             container.classList.add('media-viewer');
             
@@ -270,6 +270,10 @@
                     if (attachment.type == 'image') {
                         let img = document.createElement('img');
                         img.src = attachment.url;
+                        img.addEventListener('click', function(e) {
+                            //console.log(e.target);
+                            _this.toggleLargeViewer(container);
+                        });
                         media.push(img);
                     }
                 });
@@ -283,6 +287,24 @@
             }
             container.append(...media);
             return container;
+        };
+        Posts.prototype.toggleLargeViewer = function (viewerEl) {
+            let lgViewer = viewerEl.cloneNode(true);
+            lgViewer.querySelector('.many').remove();
+            lgViewer.classList.add('large');
+            lgViewer.classList.add('blackout');
+            lgViewer.addEventListener('click', function (e) {
+                e.preventDefault();
+                let container = e.target;
+                while (!container.classList.contains('blackout')) {
+                    container = container.parentNode;
+                }
+
+                container.remove();
+            });
+
+            let body = document.getElementsByTagName("body")[0];
+            body.append(lgViewer);
         };
         return Posts;
     }());

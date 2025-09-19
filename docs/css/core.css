@@ -233,6 +233,16 @@ article section .media-viewer img {
     max-width: 320px;
 }
 
+.blackout.media-viewer.large {
+    justify-content: flex-start;
+    overflow-y: scroll;
+}
+.blackout.media-viewer.large img {
+    max-width: 720px;
+    max-height: 720px;
+}
+
+
 
 @media all and (min-width: 480px){
     .page{

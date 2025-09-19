@@ -1,4 +1,4 @@
-import { Cache } from "./Cache";
+import { Cache } from "./Cache.js";
 var Posts = (function () {
     function Posts (id, options = {}) {
         this.user_id = id;
@@ -66,6 +66,7 @@ var Posts = (function () {
         return header;
     };
     Posts.prototype.renderMedia = function(obj) {
+        let _this = this;
         let container = document.createElement('div');
         container.classList.add('media-viewer')
         
@@ -75,6 +76,10 @@ var Posts = (function () {
                 if (attachment.type == 'image') {
                     let img = document.createElement('img');
                     img.src = attachment.url;
+                    img.addEventListener('click', function(e) {
+                        //console.log(e.target);
+                        _this.toggleLargeViewer(container);
+                    });
                     media.push(img);
                 }
             })
@@ -88,6 +93,24 @@ var Posts = (function () {
         }
         container.append(...media);
         return container;
+    };
+    Posts.prototype.toggleLargeViewer = function (viewerEl) {
+        let lgViewer = viewerEl.cloneNode(true);
+        lgViewer.querySelector('.many').remove();
+        lgViewer.classList.add('large');
+        lgViewer.classList.add('blackout');
+        lgViewer.addEventListener('click', function (e) {
+            e.preventDefault();
+            let container = e.target;
+            while (!container.classList.contains('blackout')) {
+                container = container.parentNode
+            }
+
+            container.remove();
+        });
+
+        let body = document.getElementsByTagName("body")[0];
+        body.append(lgViewer);
     };
     return Posts;
 }());

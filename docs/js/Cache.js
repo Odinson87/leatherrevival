@@ -7,7 +7,6 @@ var Cache = (function () {
         }
 
         let stores = this.getStores('stores');
-        console.log('cache store:', stores);
 
         let item = this.load(name) ?? {};
         //console.log('cache item:', item, Object.keys(item).length);
@@ -39,7 +38,7 @@ var Cache = (function () {
         const timeStrRegex = /(\d*?)([hm])$/;
         let result = value;
         let isnum = /^\d+$/.test(value);
-        console.log('calcMs', isnum);
+
         if (!isnum && timeStrRegex.test(value)) {
             let i = value.match(timeStrRegex);
             let t = i[2];
