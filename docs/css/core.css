@@ -176,32 +176,45 @@ nav .btn:hover{
 
 .posts {
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row wrap;
     justify-content: center;
-    max-width: 320px;
     gap: 20px
 }
 
 article {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
     background-color: #333;
     border-radius: 8px;
+    max-width: 320px;
 }
 
-article header,
 article section,
 article footer {
     color: antiquewhite;
     margin: 10px;
 }
-
-article header {
-    display: flex;
-    align-items: center;
+article section p:first-child {
+    margin-top: 0;
 }
-article header .avatar {
+
+article .account,
+article footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding:0;
+}
+
+article .account .avatar {
     width: 30px;
     border-radius: 50%;
     margin-right: 10px;
+}
+article footer .username,
+article footer .time {
+    font-size: small;
 }
 article a,
 article a:hover,
@@ -269,6 +282,11 @@ article section .media-viewer img {
 }
 
 .center {text-align:center;}
+.column {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+}
 
 span.many  {
     position: absolute;

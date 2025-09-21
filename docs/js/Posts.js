@@ -4,6 +4,7 @@ var Posts = (function () {
         this.user_id = id;
         this.options = options;
     }
+
     Posts.prototype.getUserPosts = async function () {
         let cachedPosts = new Cache().load('posts');
         
@@ -23,6 +24,7 @@ var Posts = (function () {
         new Cache().save('posts', posts);
         return posts;
     };
+
     Posts.prototype.render = async function() {
         let posts = await this.getUserPosts();
         let container = document.createElement('div');
@@ -32,39 +34,61 @@ var Posts = (function () {
         });
         return container;
     };
+
     Posts.prototype.renderPost = function (obj) {
-        // console.log(obj);
+        console.log(obj);
         let article = document.createElement('article');
         let header = this.renderHeader(obj)
         let body = document.createElement('section');
         body.classList.add('body');
         body.innerHTML = obj.content;
         body.append(this.renderMedia(obj));
-        let footer = document.createElement('footer');
+        let footer = this.renderFooter(obj);
         article.appendChild(header);
         article.appendChild(body);
         article.appendChild(footer);
         return article;
     };
+
     Posts.prototype.renderHeader = function (obj) {
         let header = document.createElement('header');
-        if (Object.hasOwn(obj, 'account')) {
-            let avatar = document.createElement('img');
-            avatar.src = obj.account.avatar
-            avatar.classList.add('avatar');
-
-            let name = document.createTextNode(
-                obj.account.display_name + ' @' + obj.account.acct
-            );
-            let link = document.createElement('a');
-            link.setAttribute('href', obj.account.uri);
-            link.appendChild(name);
-            
-            header.appendChild(avatar);
-            header.appendChild(link);
-        }
         return header;
     };
+
+    Posts.prototype.renderFooter = function(obj) {
+        let footer = document.createElement('footer');
+        if (Object.hasOwn(obj, 'account')) {
+            let user = this.renderAccount(obj.account);
+            let time = document.createElement('p');
+            time.classList.add('time');
+            time.appendChild(document.createTextNode(obj.created_at.fromISODate()));
+            footer.append(...[user, time]);
+        }
+        return footer;
+    };
+
+    Posts.prototype.renderAccount = function (account) {
+        let container = document.createElement('div');
+        container.classList.add('account');
+        let avatar = document.createElement('img');
+        avatar.src = account.avatar
+        avatar.classList.add('avatar');
+
+        let userName = document.createElement('a');
+        userName.classList.add('username');
+        userName.classList.add('column');
+        userName.setAttribute('href', account.uri);
+        
+        let name1 = document.createElement('span');
+        name1.appendChild(document.createTextNode(account.display_name));
+        let name2 = document.createElement('span')
+        name2.appendChild(document.createTextNode('@' + account.acct));
+        userName.append(...[name1, name2]);
+
+        container.append(...[avatar,userName]);
+        return container;
+    };
+
     Posts.prototype.renderMedia = function(obj) {
         let _this = this;
         let container = document.createElement('div');
@@ -94,22 +118,18 @@ var Posts = (function () {
         container.append(...media);
         return container;
     };
+
     Posts.prototype.toggleLargeViewer = function (viewerEl) {
         let lgViewer = viewerEl.cloneNode(true);
         let many = lgViewer.querySelector('.many');
-        if (null !== many) {
+        if (many) {
             many.remove();
         }
         lgViewer.classList.add('large');
         lgViewer.classList.add('blackout');
         lgViewer.addEventListener('click', function (e) {
             e.preventDefault();
-            let container = e.target;
-            while (!container.classList.contains('blackout')) {
-                container = container.parentNode
-            }
-
-            container.remove();
+            e.target.closest('.blackout').remove();
         });
 
         let body = document.getElementsByTagName("body")[0];
