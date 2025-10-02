@@ -222,8 +222,29 @@
                 }
             });
 
+            // filter posts
+            posts = this.filterByTags(posts, ['leatherwork']);
+
             new Cache().save('posts', posts);
             return posts;
+        };
+
+        Posts.prototype.filterByTags = function(posts, tags) {
+
+            return posts.filter((post) => { 
+
+                // check for first occurence of ANY tag name in tags
+                return tags.some((t, i, arr) => {
+
+                    // check each tag, stop if found
+                    return post.tags.some((tObj, i2, arr2) => {       
+                        if (tObj.name == t){
+                            return true;
+                        }
+                        return false;
+                    });
+                });
+            });
         };
 
         Posts.prototype.render = async function() {
@@ -237,7 +258,7 @@
         };
 
         Posts.prototype.renderPost = function (obj) {
-            console.log(obj);
+            //console.log(obj);
             let article = document.createElement('article');
             let header = this.renderHeader(obj);
             let body = document.createElement('section');
