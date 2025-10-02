@@ -1,7 +1,7 @@
 var Cache = (function () {
     function Cache(name = null, intervalMs = null, data = null) {
         
-        // when all null get use as service
+        // when all null return self for use as a service
         if (!name || !intervalMs || !data) {
             return;
         }
@@ -35,10 +35,12 @@ var Cache = (function () {
     }
     Cache.prototype.calcMs = function (value) {
         
+        // check for t(ime) suffixes h(ours) and m(inutes)
         const timeStrRegex = /(\d*?)([hm])$/;
         let result = value;
         let isnum = /^\d+$/.test(value);
 
+        // multiply to get milliseconds
         if (!isnum && timeStrRegex.test(value)) {
             let i = value.match(timeStrRegex);
             let t = i[2];
@@ -95,9 +97,8 @@ var Cache = (function () {
             
             // update store metadata
             let stores = this.getStores();
-            let d = Date.now();
             if (Object.hasOwn(stores, name)) {
-                stores[name]['lastTimeMs'] = d;
+                stores[name]['lastTimeMs'] = Date.now();
             }
             this.saveStores(stores);
             return true;
